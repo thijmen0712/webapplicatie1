@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
-        <script>
+    <script>
         function toggleLogin() {
             const inlogBox = document.querySelector('.inlog');
             const contentBox = document.querySelector('.content');
@@ -64,13 +64,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
             closeCartBtn.addEventListener('click', () => {
                 shoppingCart.style.display = 'none';
             });
-
-            <?php if ($winkelwagenOpen): ?>
-                shoppingCart.style.display = 'flex';
-            <?php endif; ?>
         });
+        <?php if ($winkelwagenOpen): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const shoppingCart = document.querySelector('.shoppingcart');
+                shoppingCart.style.display = 'flex';
+            });
+        </script>
+        <?php endif; ?>
+   
     </script>
 </head>
+
+
 
 <body class="index">
     <?php

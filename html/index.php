@@ -27,7 +27,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
-    <script>
+        <script>
+        function toggleLogin() {
+            const inlogBox = document.querySelector('.inlog');
+            const contentBox = document.querySelector('.content');
+            if (inlogBox.style.display === 'none' || !inlogBox.style.display) {
+                inlogBox.style.display = 'block';
+                contentBox.style.display = 'none';
+            } else {
+                inlogBox.style.display = 'none';
+                contentBox.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const closeBtn = document.querySelector('.close-btn');
+            const inlogBox = document.querySelector('.inlog');
+            const contentBox = document.querySelector('.content');
+
+            closeBtn.addEventListener('click', () => {
+                inlogBox.style.display = 'none';
+                contentBox.style.display = 'block';
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const winkelwagenLink = document.querySelector('.winkelwagen');
             const shoppingCart = document.querySelector('.shoppingcart');
@@ -54,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     include 'header.php';
     ?>
     <div class="knoppen">
-        <button onclick="toggleLogin()">Inloggen</button>
+        <button onclick="toggleLogin()" style="cursor: pointer">Inloggen</button>
         <?php
         $sql = "SELECT SUM(p.prijs * wp.aantal) AS totaalprijs 
             FROM winkelwagen_producten wp

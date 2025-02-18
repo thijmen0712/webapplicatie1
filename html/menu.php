@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function toggleLogin() {
             const inlogBox = document.querySelector('.inlog');
             const contentBox = document.querySelector('.content');
+            inlogBox.style.cursor = 'pointer';
             if (inlogBox.style.display === 'none' || !inlogBox.style.display) {
                 inlogBox.style.display = 'block';
                 contentBox.style.display = 'none';
@@ -103,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include 'header.php';
     ?>
     <div class="knoppen">
-        <button onclick="toggleLogin()">Inloggen</button>
+        <button onclick="toggleLogin()" style="cursor: pointer">Inloggen</button>
         <?php
         $sql = "SELECT SUM(p.prijs * wp.aantal) AS totaalprijs 
             FROM winkelwagen_producten wp

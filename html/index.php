@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
@@ -27,54 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
-    <script>
-        function toggleLogin() {
-            const inlogBox = document.querySelector('.inlog');
-            const contentBox = document.querySelector('.content');
-            if (inlogBox.style.display === 'none' || !inlogBox.style.display) {
-                inlogBox.style.display = 'block';
-                contentBox.style.display = 'none';
-            } else {
-                inlogBox.style.display = 'none';
-                contentBox.style.display = 'block';
-            }
-        }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const closeBtn = document.querySelector('.close-btn');
-            const inlogBox = document.querySelector('.inlog');
-            const contentBox = document.querySelector('.content');
+    <script src="script.js"></script>
 
-            closeBtn.addEventListener('click', () => {
-                inlogBox.style.display = 'none';
-                contentBox.style.display = 'block';
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const winkelwagenLink = document.querySelector('.winkelwagen');
-            const shoppingCart = document.querySelector('.shoppingcart');
-            const closeCartBtn = document.querySelector('.sluit-winkelwagen');
-
-            winkelwagenLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                shoppingCart.style.display = 'flex';
-            });
-
-            closeCartBtn.addEventListener('click', () => {
-                shoppingCart.style.display = 'none';
-            });
-        });
-        <?php if ($winkelwagenOpen): ?>
+    <?php if ($winkelwagenOpen): ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const shoppingCart = document.querySelector('.shoppingcart');
                 shoppingCart.style.display = 'flex';
             });
         </script>
-        <?php endif; ?>
-   
-    </script>
+    <?php endif; ?>
+
 </head>
 
 
@@ -84,7 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     include 'header.php';
     ?>
     <div class="knoppen">
-        <button onclick="toggleLogin()" style="cursor: pointer">Inloggen</button>
+        <?php
+        $knopTekst = isset($_SESSION['gebruiker_naam']) ? $_SESSION['gebruiker_naam'] : 'Inloggen';
+        ?>
+
+        <button id="loginBtn" onclick="toggleLogin()"
+            style="cursor: pointer"><?php echo htmlspecialchars($knopTekst); ?></button>
+
+
         <?php
         $sql = "SELECT SUM(p.prijs * wp.aantal) AS totaalprijs 
             FROM winkelwagen_producten wp
@@ -101,13 +73,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
         <div class="inlog" style="display: none;">
             <span class="close-btn"><img src="images/kruis.png" alt="kruis"></span>
             <h2 style="text-align: center;">login</h2>
-            <form class="inlog-box" action="inloggen.php" method="post">
+            <form id="loginForm" class="inlog-box" action="inloggen.php" method="post">
                 <input type="email" name="email" placeholder="E-mailadres" required>
                 <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
                 <input type="submit" value="doorgaan">
             </form>
             <div class="signup">nog geen account? <a href="#" style="color: #36160A;">maak er een!</a></div>
         </div>
+        <div id="logoutBox" style="display: none;">
+            <button id="logoutBtn">Uitloggen</button>
+        </div>
+
         <div class="content" style="text-align: center;">
             <h1>La Dolce Vita</h1>
             <p>Het restaurant voor je echte pizza</p>

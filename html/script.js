@@ -1,38 +1,81 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBox = document.getElementById("logoutBox");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const inlogBox = document.querySelector(".inlog");
+    const contentBox = document.querySelector(".content");
+    const closeBtn = document.querySelector(".close-btn");
+    const winkelwagenLink = document.querySelector(".winkelwagen");
+    const shoppingCart = document.querySelector(".shoppingcart");
+    const closeCartBtn = document.querySelector(".sluit-winkelwagen");
 
-function toggleLogin() {
-    const inlogBox = document.querySelector('.inlog');
-    const contentBox = document.querySelector('.content');
-    if (inlogBox.style.display === 'none' || !inlogBox.style.display) {
-        inlogBox.style.display = 'block';
-        contentBox.style.display = 'none';
-    } else {
-        inlogBox.style.display = 'none';
-        contentBox.style.display = 'block';
+    // Toggle login popup
+    function toggleLogin() {
+        if (inlogBox.style.display === "none" || !inlogBox.style.display) {
+            inlogBox.style.display = "block";
+            contentBox.style.display = "none";
+        } else {
+            inlogBox.style.display = "none";
+            contentBox.style.display = "block";
+        }
     }
-}
 
-document.addEventListener('DOMContentLoaded', () => {
-    const closeBtn = document.querySelector('.close-btn');
-    const inlogBox = document.querySelector('.inlog');
-    const contentBox = document.querySelector('.content');
+    if (loginBtn) {
+        loginBtn.addEventListener("click", toggleLogin);
+    }
 
-    closeBtn.addEventListener('click', () => {
-        inlogBox.style.display = 'none';
-        contentBox.style.display = 'block';
-    });
-});
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            inlogBox.style.display = "none";
+            contentBox.style.display = "block";
+        });
+    }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const winkelwagenLink = document.querySelector('.winkelwagen');
-    const shoppingCart = document.querySelector('.shoppingcart');
-    const closeCartBtn = document.querySelector('.sluit-winkelwagen');
-
-    winkelwagenLink.addEventListener('click', (e) => {
+    // Login form submit
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
         e.preventDefault();
-        shoppingCart.style.display = 'flex';
+    
+        const formData = new FormData(this);
+    
+        fetch("inloggen.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById("loginBtn").textContent = data.voornaam;
+                document.querySelector(".inlog").style.display = "none";
+            } else {
+                alert("Ongeldige login");
+            }
+        });
     });
+    
 
-    closeCartBtn.addEventListener('click', () => {
-        shoppingCart.style.display = 'none';
-    });
+    // Logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            fetch("uitloggen.php")
+            .then(() => {
+                loginBtn.textContent = "Inloggen";
+                logoutBox.style.display = "none";
+            });
+        });
+    }
+
+    // Winkelwagen openen en sluiten
+    if (winkelwagenLink) {
+        winkelwagenLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            shoppingCart.style.display = "flex";
+        });
+    }
+
+    if (closeCartBtn) {
+        closeCartBtn.addEventListener("click", () => {
+            shoppingCart.style.display = "none";
+        });
+    }
 });

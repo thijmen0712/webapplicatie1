@@ -263,7 +263,7 @@ nav a {
 }
 
 .overons-content h1 {
-    color: #36160A;
+    color: white;
     font-size: 90px;
     font-family: "Playfair Display", serif;
     font-weight: 900;
@@ -273,13 +273,12 @@ nav a {
 }
 
 .overons-content p {
-    color: #36160A;
+    color: white;
     font-size: 20px;
     font-family: "Lato", serif;
     font-weight: 900;
     font-style: italic;
     margin: 0;
-    background-color: rgba(255, 255, 255, 0.4);
     border-radius: 10px;
     padding: 10px;
 }
@@ -422,6 +421,16 @@ nav a {
     border-top: 1px solid #000;
     margin: 10px 0;
     color: black;
+}
+
+.line2 {
+    margin-top: 50px;
+    width: 80%;
+    height: 2px;
+    background-color: white;
+    border-top: 1px solid white;
+    margin: 10px 0;
+    color: white;
 }
 
 

@@ -35,33 +35,33 @@ document.addEventListener("DOMContentLoaded", () => {
     // Login form submit
     document.getElementById("loginForm").addEventListener("submit", function (e) {
         e.preventDefault();
-    
+
         const formData = new FormData(this);
-    
+
         fetch("inloggen.php", {
             method: "POST",
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById("loginBtn").textContent = data.voornaam;
-                document.querySelector(".inlog").style.display = "none";
-            } else {
-                alert("Ongeldige login");
-            }
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Herlaadt de pagina na succesvolle login
+                } else {
+                    alert("Ongeldige login");
+                }
+            });
     });
-    
+
+
 
     // Logout
     if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
             fetch("uitloggen.php")
-            .then(() => {
-                loginBtn.textContent = "Inloggen";
-                logoutBox.style.display = "none";
-            });
+                .then(() => {
+                    loginBtn.textContent = "Inloggen";
+                    logoutBox.style.display = "none";
+                });
         });
     }
 

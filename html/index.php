@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'session.php';
 include 'connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
@@ -50,6 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     ?>
     <div class="knoppen">
         <?php
+        if ($_SESSION['role'] === 'admin') {
+            echo "<a href='admin.php'>Admin menu</a>";
+        }
+        ?>
+        <?php
         $knopTekst = isset($_SESSION['gebruiker_naam']) ? $_SESSION['gebruiker_naam'] : 'Inloggen';
         ?>
 
@@ -80,15 +85,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
             </form>
             <div class="signup">nog geen account? <a href="#" style="color: #36160A;">maak er een!</a></div>
         </div>
-        <div id="logoutBox" style="display: none;">
-            <button id="logoutBtn">Uitloggen</button>
-        </div>
 
         <div class="content" style="text-align: center;">
             <h1>La Dolce Vita</h1>
             <p>Het restaurant voor je echte pizza</p>
             <a href="menu.php" class="btn">Bestellen</a>
+            <?php
+
+            $sql = "SELECT * FROM account WHERE emailadres = :email";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(":email", $email);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC); // Haal een associatieve array op
+            
+            if ($user && $user['rol'] === 'admin') {
+                echo "Welkom, admin!";
+            }
+
+            ?>
         </div>
+
+
+
     </div>
     <div class="shoppingcart" style="display: <?php echo $winkelwagenOpen ? 'flex' : 'none'; ?>;">
         <span class="sluit-winkelwagen"><img src="images/kruis2.png" alt="kruis"></span>

@@ -72,12 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
             </form>
             <div class="signup">nog geen account? <a href="#" style="color: #36160A;">maak er een!</a></div>
         </div>
-        <div class="content" style="text-align: center;">
+        <div class="content" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
             <h1>contact</h1>
             <h2>neem contact met ons op via:</h2>
             <p>024-01234567</p>
             <p>contact.ladolcevita.nl</p>
-            <div class="line"></div>
+            <div class="line2"></div>
             <h2>of bezoek ons restaurant</h2>
             <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4931.661490599537!2d5.866273276490216!3d51.827522271887865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c708fa2ca25e35%3A0x8daddc0e2cfc98dc!2sHeyendaalseweg%2098%2C%206525%20EE%20Nijmegen!5e0!3m2!1snl!2snl!4v1739898112497!5m2!1snl!2snl"

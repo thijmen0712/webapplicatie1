@@ -1,4 +1,5 @@
 <?php
+include 'session.php';
 include 'connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
@@ -48,7 +49,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     include 'header.php';
     ?>
     <div class="knoppen">
-        <button onclick="toggleLogin()" style="cursor: pointer">Inloggen</button>
+        <?php
+        if ($_SESSION['role'] === 'admin') {
+            echo "<a href='admin.php'>Admin menu</a>";
+        }
+        ?>
+        <?php
+        $knopTekst = isset($_SESSION['gebruiker_naam']) ? $_SESSION['gebruiker_naam'] : 'Inloggen';
+        ?>
+
+        <button id="loginBtn" onclick="toggleLogin()"
+            style="cursor: pointer"><?php echo htmlspecialchars($knopTekst); ?></button>
+
+
         <?php
         $sql = "SELECT SUM(p.prijs * wp.aantal) AS totaalprijs 
             FROM winkelwagen_producten wp

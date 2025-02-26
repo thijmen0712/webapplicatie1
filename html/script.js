@@ -1,29 +1,43 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("loginForm");
     const loginBtn = document.getElementById("loginBtn");
-    const logoutBox = document.getElementById("logoutBox");
-    const logoutBtn = document.getElementById("logoutBtn");
     const inlogBox = document.querySelector(".inlog");
     const contentBox = document.querySelector(".content");
     const closeBtn = document.querySelector(".close-btn");
+    const signupLink = document.querySelector(".signup a");
+    const loginForm = document.getElementById("loginForm");
     const winkelwagenLink = document.querySelector(".winkelwagen");
     const shoppingCart = document.querySelector(".shoppingcart");
     const closeCartBtn = document.querySelector(".sluit-winkelwagen");
 
-    // Toggle login popup
+    // Check of de gebruiker is ingelogd
+    let isLoggedIn = loginBtn.textContent !== "Inloggen";
+
+    // Voeg submenu toe aan de HTML
+    const submenu = document.createElement("div");
+    submenu.classList.add("submenu");
+    submenu.innerHTML = `<a href="uitloggen.php" id="logoutBtn">Uitloggen</a>`;
+    submenu.style.display = "none";
+    loginBtn.insertAdjacentElement("afterend", submenu);
+
     function toggleLogin() {
-        if (inlogBox.style.display === "none" || !inlogBox.style.display) {
+        if (isLoggedIn) {
+            submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+        } else {
             inlogBox.style.display = "block";
             contentBox.style.display = "none";
-        } else {
-            inlogBox.style.display = "none";
-            contentBox.style.display = "block";
         }
     }
 
-    if (loginBtn) {
-        loginBtn.addEventListener("click", toggleLogin);
-    }
+    loginBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleLogin();
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!loginBtn.contains(e.target) && !submenu.contains(e.target)) {
+            submenu.style.display = "none";
+        }
+    });
 
     if (closeBtn) {
         closeBtn.addEventListener("click", () => {
@@ -32,38 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Login form submit
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
+    // Schakel naar aanmeldbox
+    signupLink.addEventListener("click", (e) => {
         e.preventDefault();
-
-        const formData = new FormData(this);
-
-        fetch("inloggen.php", {
-            method: "POST",
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Herlaadt de pagina na succesvolle login
-                } else {
-                    alert("Ongeldige login");
-                }
-            });
+        loginForm.innerHTML = `
+            <input type="text" name="naam" placeholder="Naam" required>
+            <input type="email" name="email" placeholder="E-mailadres" required>
+            <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
+            <input type="password" name="herhaal_wachtwoord" placeholder="Herhaal wachtwoord" required>
+            <input type="submit" value="Account aanmaken">
+        `;
     });
-
-
-
-    // Logout
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-            fetch("uitloggen.php")
-                .then(() => {
-                    loginBtn.textContent = "Inloggen";
-                    logoutBox.style.display = "none";
-                });
-        });
-    }
 
     // Winkelwagen openen en sluiten
     if (winkelwagenLink) {

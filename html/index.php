@@ -49,6 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     include 'header.php';
     ?>
     <div class="knoppen">
+        <div id="submenu" class="submenu">
+            <a href="uitloggen.php" id="logoutBtn">Uitloggen</a>
+        </div>
+
         <?php
         if ($_SESSION['role'] === 'admin') {
             echo "<a href='admin.php'>Admin menu</a>";

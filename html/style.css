@@ -50,6 +50,26 @@ header {
     box-sizing: border-box;
 }
 
+.submenu {
+    position: absolute;
+    display: none;
+    border-radius: 5px;
+    top: 50px;
+    right: 0px;
+}
+
+.submenu a {
+    color: black;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+}
+
+.submenu a:hover {
+    background: #f0f0f0;
+}
+
+
 .socials img {
     width: 40px;
     height: 40px;
@@ -74,14 +94,20 @@ nav a {
 .index,
 .menu,
 .overons,
-.contact {
+.contact,
+.admin,
+.pizza,
+.account {
     background-color: #cccccc;
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
 }
 
-.index {
+.index,
+.admin,
+.pizza,
+.account {
     background-image: url("images/achtergrondindex.png");
 }
 
@@ -103,9 +129,11 @@ nav a {
     justify-content: center;
     align-items: center;
 }
+
 .margin-top {
     margin-top: 200px;
 }
+
 .content {
     color: white;
     width: 700px;
@@ -351,31 +379,41 @@ nav a {
     overflow-y: auto;
     color: white;
 }
-.menukaart, .scrolbaar {
+
+.menukaart,
+.scrolbaar {
     padding: 10px;
     width: 100%;
-    height: 710px; 
-    overflow-y: auto; 
+    height: 710px;
+    overflow-y: auto;
 }
+
 .items {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     padding: 20px;
-    width: 100%; /* Zorg ervoor dat het 100% van de breedte is */
-    box-sizing: border-box; /* Zorg ervoor dat padding en borders worden meegerekend */
-    overflow: hidden; /* Verberg alles dat buiten de container valt */
+    width: 100%;
+    /* Zorg ervoor dat het 100% van de breedte is */
+    box-sizing: border-box;
+    /* Zorg ervoor dat padding en borders worden meegerekend */
+    overflow: hidden;
+    /* Verberg alles dat buiten de container valt */
 }
 
-.items > * {
-    flex: 1 0 30%; /* Zorg ervoor dat elk item 30% van de container breedte is */
-    box-sizing: border-box; /* Zorg ervoor dat padding/border correct wordt meegenomen */
-    margin-bottom: 10px; /* Zorg voor ruimte tussen de items */
+.items>* {
+    flex: 1 0 30%;
+    /* Zorg ervoor dat elk item 30% van de container breedte is */
+    box-sizing: border-box;
+    /* Zorg ervoor dat padding/border correct wordt meegenomen */
+    margin-bottom: 10px;
+    /* Zorg voor ruimte tussen de items */
 }
 
 /* Als je wilt dat de items netjes binnen de container vallen, kun je de items ook een maximale breedte geven */
-.items > * {
-    max-width: 33%; /* Zorg ervoor dat geen item breder is dan 33% */
+.items>* {
+    max-width: 33%;
+    /* Zorg ervoor dat geen item breder is dan 33% */
 }
 
 

@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'session.php';
 include 'connect.php';
 
 header('Content-Type: application/json');
@@ -17,9 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user && $wachtwoord === $user['wachtwoord']) {
         $_SESSION['gebruiker_id'] = $user['id'];
         $_SESSION['gebruiker_naam'] = $user['naam'];
-        echo json_encode(["success" => true, "voornaam" => $user['naam'], "redirect" => $_SERVER['HTTP_REFERER']]);
+
+        // Redirect naar de vorige pagina
+        $redirect_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'default_page.php';
+        header("Location: $redirect_url");
+        exit();
     } else {
-        echo json_encode(["success" => false]);
+        $redirect_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'default_page.php';
+        header("Location: $redirect_url");
+        exit();
     }
+
 }
-?>

@@ -59,25 +59,22 @@ if ($_SESSION['role'] != 'admin') {
                 $result = $conn->query($sql);
                 if ($result->rowCount() > 0) {
                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<div class='pizza-item'>";
-                            echo "<div class='pizza-image'><img src='images/" . $row['foto'] . "' alt='" . $row['titel'] . "'></div>";
-                            echo "<div class='pizza-details'>";
-                            echo "<div class='pizza-title'>" . $row['titel'] . "</div>";
-                            echo "<div class='pizza-description'>" . $row['beschrijving'] . "</div>";
-                            echo "</div>";
-                            echo "<div class='pizza-price'>" . $row['prijs'] . "</div>";
-                            echo "<div class='pizza-actions'>";
-                            echo "<a href='#' onclick=\"openIframe('editpizza.php?id=" . $row['id'] . "')\"><img src='images/pencil.png'></a>";
-                            echo "<a href='deletepizza.php?id=" . $row['id'] . "'><img src='images/bin.png'></a>";
-                            echo "</div>";
-                            echo "</div>";
-                        }
-
+                        echo "<div class='pizza-item'>";
+                        echo "<div class='pizza-image'><img src='images/" . $row['foto'] . "' alt='" . $row['titel'] . "'></div>";
+                        echo "<div class='pizza-details'>";
+                        echo "<div class='pizza-title'>" . $row['titel'] . "</div>";
+                        echo "<div class='pizza-description'>" . $row['beschrijving'] . "</div>";
+                        echo "</div>";
+                        echo "<div class='pizza-price'>" . $row['prijs'] . "</div>";
+                        echo "<div class='pizza-actions'>";
+                        echo "<a href='#' onclick=\"openIframe('editpizza.php?id=" . $row['id'] . "')\"><img src='images/pencil.png'></a>";
+                        echo "<a href='deletepizza.php?id=" . $row['id'] . "'><img src='images/bin.png'></a>";
+                        echo "</div>";
+                        echo "</div>";
                     }
-
                 }
                 ?>
+
             </div>
         </div>
     </div>

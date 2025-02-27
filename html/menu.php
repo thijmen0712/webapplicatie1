@@ -57,30 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
     <script>
-        function toggleLogin() {
-            const inlogBox = document.querySelector('.inlog');
-            const contentBox = document.querySelector('.content');
-            inlogBox.style.cursor = 'pointer';
-            if (inlogBox.style.display === 'none' || !inlogBox.style.display) {
-                inlogBox.style.display = 'block';
-                contentBox.style.display = 'none';
-            } else {
-                inlogBox.style.display = 'none';
-                contentBox.style.display = 'block';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const closeBtn = document.querySelector('.close-btn');
-            const inlogBox = document.querySelector('.inlog');
-            const contentBox = document.querySelector('.content');
-
-            closeBtn.addEventListener('click', () => {
-                inlogBox.style.display = 'none';
-                contentBox.style.display = 'block';
-            });
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
             const winkelwagenLink = document.querySelector('.winkelwagen');
             const shoppingCart = document.querySelector('.shoppingcart');
@@ -100,37 +76,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
         });
     </script>
+    <script src="script.js"></script>
 </head>
 
 <body class="menu">
     <?php
     include 'header.php';
     ?>
-    <div class="knoppen">
-        <?php
-        if ($_SESSION['role'] === 'admin') {
-            echo "<a href='admin.php'>Admin menu</a>";
-        }
-        ?>
-        <?php
-        $knopTekst = isset($_SESSION['gebruiker_naam']) ? $_SESSION['gebruiker_naam'] : 'Inloggen';
-        ?>
-
-        <button id="loginBtn" onclick="toggleLogin()"
-            style="cursor: pointer"><?php echo htmlspecialchars($knopTekst); ?></button>
-
-
-        <?php
-        $sql = "SELECT SUM(p.prijs * wp.aantal) AS totaalprijs 
-            FROM winkelwagen_producten wp
-            JOIN product p ON wp.product_id = p.id";
-        $result = $conn->query($sql);
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        $totalPrice = $row['totaalprijs'] ? number_format($row['totaalprijs'], 2) : '0.00';
-        ?>
-        <a class="winkelwagen" href="winkelwagen"><img src="images/winkelwagen.png"
-                alt="winkelwagen">€<?php echo $totalPrice; ?></a>
-    </div>
+    <?php
+    include 'knoppen.php';
+    ?>
     <div class="container">
 
         <div class="inlog" style="display: none;">
@@ -145,6 +100,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="content menukaart">
             <h1 style="text-align: center;">Menu</h1>
+            <div class="zoekbalk">
+                <input type="text" placeholder="Zoeken op naam of ingrediënt">
+            </div>
+            <div class="filter-opties">
+                <label for="sorteren">Sorteren op:</label>
+                <select id="sorteren" onchange="sortProducts()">
+                    <option value="default">Selecteer</option>
+                    <option value="prijs-asc">Prijs: Laag naar Hoog</option>
+                    <option value="prijs-desc">Prijs: Hoog naar Laag</option>
+                    <option value="naam-asc">Naam: A-Z</option>
+                    <option value="naam-desc">Naam: Z-A</option>
+                </select>
+                <button onclick="resetSort()">Reset</button>
+            </div>
+
             <div class="items">
                 <?php
                 $sql = "SELECT * FROM product";

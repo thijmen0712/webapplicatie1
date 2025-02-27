@@ -48,31 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     <?php
     include 'header.php';
     ?>
-    <div class="knoppen">
-        <?php
-        if ($_SESSION['role'] === 'admin') {
-            echo "<a href='admin.php'>Admin menu</a>";
-        }
-        ?>
-        <?php
-        $knopTekst = isset($_SESSION['gebruiker_naam']) ? $_SESSION['gebruiker_naam'] : 'Inloggen';
-        ?>
-
-        <button id="loginBtn" onclick="toggleLogin()"
-            style="cursor: pointer"><?php echo htmlspecialchars($knopTekst); ?></button>
-
-
-        <?php
-        $sql = "SELECT SUM(p.prijs * wp.aantal) AS totaalprijs 
-            FROM winkelwagen_producten wp
-            JOIN product p ON wp.product_id = p.id";
-        $result = $conn->query($sql);
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        $totalPrice = $row['totaalprijs'] ? number_format($row['totaalprijs'], 2) : '0.00';
-        ?>
-        <a class="winkelwagen" href="winkelwagen"><img src="images/winkelwagen.png"
-                alt="winkelwagen">€<?php echo $totalPrice; ?></a>
-    </div>
+    <?php
+    include 'knoppen.php';
+    ?>
     <div class="container scrolbaar">
 
         <div class="inlog" style="display: none;">
@@ -88,8 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
         <div class="content" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
             <h1>contact</h1>
             <h2>neem contact met ons op via:</h2>
-            <p>024-01234567</p>
-            <p>contact.ladolcevita.nl</p>
+            <div class="phone" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <img style="width: 40px; height: 40px;" src="images/telefoon.png" alt="telefoon">
+                <p>024 12 34 56</p>
+            </div>
+            <div class="email" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <img style="width: 40px; height: 40px;" src="images/mail.png" alt="email">
+                <p>contact.ladolcevita.nl</p>
+            </div>
             <div class="line2"></div>
             <h2>of bezoek ons restaurant</h2>
             <iframe

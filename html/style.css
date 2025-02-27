@@ -216,7 +216,7 @@ nav a {
 
 .inlog {
     width: 600px;
-    height: 250px;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -600,15 +600,7 @@ textarea {
     height: 80px;
 }
 
-button {
-    margin-top: 10px;
-    background-color: black;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+
 
 .box-rechts {
     width: 100%;
@@ -702,3 +694,55 @@ button {
     font-size: 16px;
     border-radius: 5px;
 }
+.zoekbalk {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.zoekbalk input[type="text"] {
+    background-color: white;
+    border-radius: 50px;
+    color: black;
+    width: 400px;
+    height: 40px;
+    box-shadow: 0 0 10px black;
+    border: none;
+    padding: 0 20px;
+    font-size: 16px;
+}
+
+.zoekbalk input[type="text"]:focus {
+    outline: 2px solid black;
+    box-shadow: 0 0 10px black;
+}
+.filter-opties {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.filter-opties label {
+    font-weight: bold;
+}
+
+
+.filter-opties select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.filter-opties button {
+    background-color: black;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+

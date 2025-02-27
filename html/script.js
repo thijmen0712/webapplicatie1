@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+
     loginBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         toggleLogin();
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Schakel naar aanmeldbox
+
     signupLink.addEventListener("click", (e) => {
         e.preventDefault();
         loginForm.innerHTML = `
@@ -56,9 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <input type="password" name="herhaal_wachtwoord" placeholder="Herhaal wachtwoord" required>
             <input type="submit" value="Account aanmaken">
         `;
+        loginForm.action = "signup.php";
+        loginForm.method = "POST";
     });
 
-    // Winkelwagen openen en sluiten
     if (winkelwagenLink) {
         winkelwagenLink.addEventListener("click", (e) => {
             e.preventDefault();
@@ -72,3 +74,86 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+function sortProducts() {
+    const sorteren = document.getElementById('sorteren').value;
+    const producten = Array.from(document.querySelectorAll('.product'));
+    const container = document.querySelector('.items');
+
+    producten.sort((a, b) => {
+        const prijsA = parseFloat(a.querySelector('.product-onderkant p').textContent.replace('€', ''));
+        const prijsB = parseFloat(b.querySelector('.product-onderkant p').textContent.replace('€', ''));
+        const naamA = a.querySelector('h2').textContent.toLowerCase();
+        const naamB = b.querySelector('h2').textContent.toLowerCase();
+
+        switch (sorteren) {
+            case 'prijs-asc':
+                return prijsA - prijsB;
+            case 'prijs-desc':
+                return prijsB - prijsA;
+            case 'naam-asc':
+                return naamA.localeCompare(naamB);
+            case 'naam-desc':
+                return naamB.localeCompare(naamA);
+            default:
+                return 0;
+        }
+    });
+
+    container.innerHTML = '';
+    producten.forEach(product => container.appendChild(product));
+}
+function resetSort() {
+    document.getElementById('sorteren').value = 'default';
+    const container = document.querySelector('.items');
+    const producten = Array.from(document.querySelectorAll('.product'));
+
+    producten.sort((a, b) => a.dataset.index - b.dataset.index);
+
+    container.innerHTML = '';
+    producten.forEach(product => container.appendChild(product));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.product').forEach((product, index) => {
+        product.dataset.index = index;
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const zoekInput = document.querySelector('.zoekbalk input');
+    const producten = document.querySelectorAll('.product');
+
+    zoekInput.addEventListener('input', () => {
+        const zoekTerm = zoekInput.value.toLowerCase();
+        producten.forEach(product => {
+            const titel = product.querySelector('h2').textContent.toLowerCase();
+            const beschrijving = product.querySelector('p').textContent.toLowerCase();
+
+            if (titel.includes(zoekTerm) || beschrijving.includes(zoekTerm)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.querySelector('.close-btn');
+    const inlogBox = document.querySelector('.inlog');
+    let contentBox = document.querySelector('.content');
+    const overonsContent = document.querySelector('.overons-content');
+
+    closeBtn.addEventListener('click', () => {
+        inlogBox.style.display = 'none';
+        if (contentBox) {
+            contentBox.style.display = 'block';
+        } else if (overonsContent) {
+            overonsContent.style.display = 'block';
+        }
+
+    });
+});
+

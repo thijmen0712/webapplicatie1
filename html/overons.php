@@ -1,6 +1,17 @@
 <?php
 include 'session.php';
 include 'connect.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
+    $winkelwagen_id = $_POST['winkelwagen_id'];
+    $sql = "DELETE FROM winkelwagen_producten WHERE id = :winkelwagen_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':winkelwagen_id', $winkelwagen_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $winkelwagenOpen = true;
+} else {
+    $winkelwagenOpen = false;
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +20,7 @@ include 'connect.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>La Dolce Vita - Home</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="images/favicon.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,61 +28,30 @@ include 'connect.php';
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
-    <script>
-        function toggleLogin() {
-            const inlogBox = document.querySelector('.inlog');
-            const contentBox = document.querySelector('.content');
-            if (inlogBox.style.display === 'none' || !inlogBox.style.display) {
-                inlogBox.style.display = 'block';
-                contentBox.style.display = 'none';
-            } else {
-                inlogBox.style.display = 'none';
-                contentBox.style.display = 'block';
-            }
-        }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const closeBtn = document.querySelector('.close-btn');
-            const inlogBox = document.querySelector('.inlog');
-            const contentBox = document.querySelector('.content');
+    <script src="script.js"></script>
 
-            closeBtn.addEventListener('click', () => {
-                inlogBox.style.display = 'none';
-                contentBox.style.display = 'block';
+    <?php if ($winkelwagenOpen): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const shoppingCart = document.querySelector('.shoppingcart');
+                shoppingCart.style.display = 'flex';
             });
-        });
+        </script>
+    <?php endif; ?>
 
-    </script>
 </head>
+
+
 
 <body class="overons">
     <?php
     include 'header.php';
     ?>
-    <div class="knoppen">
-        <?php
-        if ($_SESSION['role'] === 'admin') {
-            echo "<a href='admin.php'>Admin menu</a>";
-        }
-        ?>
-        <?php
-        $knopTekst = isset($_SESSION['gebruiker_naam']) ? $_SESSION['gebruiker_naam'] : 'Inloggen';
-        ?>
-
-        <button id="loginBtn" onclick="toggleLogin()"
-            style="cursor: pointer"><?php echo htmlspecialchars($knopTekst); ?></button>
-        <?php
-        $sql = "SELECT SUM(p.prijs * wp.aantal) AS totaalprijs 
-            FROM winkelwagen_producten wp
-            JOIN product p ON wp.product_id = p.id";
-        $result = $conn->query($sql);
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        $totalPrice = $row['totaalprijs'] ? number_format($row['totaalprijs'], 2) : '0.00';
-        ?>
-        <a class="winkelwagen" href="winkelwagen"><img src="images/winkelwagen.png"
-                alt="winkelwagen">€<?php echo $totalPrice; ?></a>
-    </div>
-    <div class="container">
+    <?php
+    include 'knoppen.php';
+    ?>
+    <div class="container scrolbaar">
 
         <div class="inlog" style="display: none;">
             <span class="close-btn"><img src="images/kruis.png" alt="kruis"></span>
@@ -83,9 +63,9 @@ include 'connect.php';
             </form>
             <div class="signup">nog geen account? <a href="#" style="color: #36160A;">maak er een!</a></div>
         </div>
-        <div class="overons-content">
+        <div class="content" style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px;">
             <h1>Het verhaal</h1>
-            <p>Bij La Dolce Vita draait alles om passie voor pizza. Onze recepten zijn met liefde en zorg samengesteld,
+            <p style="font-size: 20px;">Bij La Dolce Vita draait alles om passie voor pizza. Onze recepten zijn met liefde en zorg samengesteld,
                 waarbij we alleen de beste ingrediënten gebruiken.
                 Elke pizza wordt met de hand gemaakt, vanaf het deeg tot aan de topping, zodat elke hap een echte
                 smaaksensatie is.
@@ -96,6 +76,43 @@ include 'connect.php';
                 Kom genieten van de pure smaken, de warme sfeer en de liefde die we in elke pizza stoppen.</p>
         </div>
     </div>
+    <div class="shoppingcart" style="display: <?php echo $winkelwagenOpen ? 'flex' : 'none'; ?>;">
+        <span class="sluit-winkelwagen"><img src="images/kruis2.png" alt="kruis"></span>
+        <h2>winkelwagen</h2>
+        <?php
+        $sql = "SELECT p.foto, p.titel, p.beschrijving, p.prijs, wp.aantal, (p.prijs * wp.aantal) AS totaalprijs, wp.id AS winkelwagen_id 
+        FROM winkelwagen_producten wp
+        JOIN product p ON wp.product_id = p.id";
+        $result = $conn->query($sql);
+
+        $totalPrice = 0;
+        if ($result->rowCount() > 0) {
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                echo "<div class='winkelwagen-product'>";
+                echo "<img class='winkelwagen-foto' src='images/" . $row['foto'] . "' alt='Product afbeelding'>";
+                echo "<div class='product-info'>";
+                echo "<h3>" . $row['titel'] . "</h3>";
+                echo "<p>" . $row['beschrijving'] . "</p>";
+                echo "</div>";
+                echo "<div class='product-actions' style='display: flex; flex-direction: column; justify-content: space-between; height: 100%;'>";
+                echo "<form action='' method='post' class='verwijder-form' style='align-self: flex-start;'>";
+                echo "<input type='hidden' name='winkelwagen_id' value='" . $row['winkelwagen_id'] . "'>";
+                echo "<button type='submit' class='verwijder-knop'><img src='images/delete_icon.png' alt='Verwijder'></button>";
+                echo "</form>";
+                echo "<p class='prijs' style='align-self: flex-end;'>€" . number_format($row['prijs'], 2) . "</p>";
+                echo "</div>";
+                echo "</div>";
+                $totalPrice += $row['totaalprijs'];
+            }
+        } else {
+            echo "<p>Je winkelwagen is leeg.</p>";
+        }
+        echo "<div class='line'></div>";
+        echo "<p>Totaal: €" . number_format($totalPrice, 2) . "</p>";
+        ?>
+        <div class="verder">
+            <a href="">verder naar bestellen</a>
+        </div>
     </div>
 </body>
 

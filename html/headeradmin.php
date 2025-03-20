@@ -4,7 +4,7 @@
     </div>
     <nav>
         <a href="pizzas.php">pizza's beheren</a>
-        <a href="accounts.php">accounts beheren</a>
+        <a href="makescreen.php">makescreen</a>
         <a href="index.php">terug naar site</a>
     </nav>
     <div class="socials">

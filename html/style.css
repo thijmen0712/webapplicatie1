@@ -383,8 +383,9 @@ nav a {
 .menukaart,
 .scrolbaar {
     padding: 10px;
+    box-sizing: border-box;
     width: 100%;
-    height: 710px;
+    height: 100%;
     overflow-y: auto;
 }
 
@@ -652,6 +653,7 @@ textarea {
     flex-direction: column;
     gap: 20px;
 }
+
 .pizza-actions a img {
     width: 40px;
     height: 40px;
@@ -694,6 +696,7 @@ textarea {
     font-size: 16px;
     border-radius: 5px;
 }
+
 .zoekbalk {
     display: flex;
     justify-content: center;
@@ -716,6 +719,7 @@ textarea {
     outline: 2px solid black;
     box-shadow: 0 0 10px black;
 }
+
 .filter-opties {
     display: flex;
     align-items: center;
@@ -746,3 +750,37 @@ textarea {
     cursor: pointer;
 }
 
+/* 
+/* responsive */
+/* @media screen and (max-width: 900px) {
+    header {
+        display: none;
+    }
+
+    .knoppen {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .submenu {
+        position: absolute;
+        display: none;
+        border-radius: 5px;
+        top: 200px;
+        right: 0px;
+    }
+
+} */
+
+.colors {
+    color: #8F9F5D;
+    color: #36160A;
+    color: #191919;
+    color: #3D1E10;
+    color: #f0f0f0;
+    color: #cccccc;
+    color: #000;
+    color: #5a2d16;
+    color: #f0f0f0;
+  }
+   */

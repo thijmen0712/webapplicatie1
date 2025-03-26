@@ -1,6 +1,6 @@
 <?php
-include 'session.php';
-include 'connect.php';
+include __DIR__ . '/../session.php';
+include __DIR__ . '/../connect.php';
 
 
 
@@ -49,13 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/images/favicon.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
+    <script src="/assets/js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const winkelwagenLink = document.querySelector('.winkelwagen');
@@ -76,20 +77,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
         });
     </script>
-    <script src="script.js"></script>
+
 </head>
 
 <body class="menu">
     <?php
-    include 'header.php';
+    include __DIR__ . '/../header.php';
     ?>
     <?php
-    include 'knoppen.php';
+    include __DIR__ . '/../knoppen.php';
     ?>
     <div class="container">
 
         <div class="inlog" style="display: none;">
-            <span class="close-btn"><img src="images/kruis.png" alt="kruis"></span>
+            <span class="close-btn"><img src="../assets/images/kruis.png" alt="kruis"></span>
             <h2 style="text-align: center;">login</h2>
             <form class="inlog-box" action="inloggen.php" method="post">
                 <input type="email" name="email" placeholder="E-mailadres" required>
@@ -121,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $conn->query($sql);
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo '<div class="product">';
-                    echo '<img src="images/' . $row['foto'] . '" alt="' . $row['titel'] . '">';
+                    echo '<img src="../assets/images/' . $row['foto'] . '" alt="' . $row['titel'] . '">';
                     echo '<h2>' . $row['titel'] . '</h2>';
                     echo '<p>' . $row['beschrijving'] . '</p>';
                     echo '<div class="product-onderkant">';
@@ -138,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <div class="shoppingcart" style="display: <?php echo $winkelwagenOpen ? 'flex' : 'none'; ?>;">
-        <span class="sluit-winkelwagen"><img src="images/kruis2.png" alt="kruis"></span>
+        <span class="sluit-winkelwagen"><img src="../assets/images/kruis2.png" alt="kruis"></span>
         <h2>winkelwagen</h2>
         <?php
         $sql = "SELECT p.foto, p.titel, p.beschrijving, p.prijs, wp.aantal, (p.prijs * wp.aantal) AS totaalprijs, wp.id AS winkelwagen_id 
@@ -150,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->rowCount() > 0) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 echo "<div class='winkelwagen-product'>";
-                echo "<img class='winkelwagen-foto' src='images/" . $row['foto'] . "' alt='Product afbeelding'>";
+                echo "<img class='winkelwagen-foto' src='../assets/images/" . $row['foto'] . "' alt='Product afbeelding'>";
                 echo "<div class='product-info'>";
                 echo "<h3>" . $row['titel'] . "</h3>";
                 echo "<p>" . $row['beschrijving'] . "</p>";
@@ -158,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<div class='product-actions' style='display: flex; flex-direction: column; justify-content: space-between; height: 100%;'>";
                 echo "<form action='' method='post' class='verwijder-form' style='align-self: flex-start;'>";
                 echo "<input type='hidden' name='winkelwagen_id' value='" . $row['winkelwagen_id'] . "'>";
-                echo "<button type='submit' class='verwijder-knop'><img src='images/delete_icon.png' alt='Verwijder'></button>";
+                echo "<button type='submit' class='verwijder-knop'><img src='../assets/images/delete_icon.png' alt='Verwijder'></button>";
                 echo "</form>";
                 echo "<p class='prijs' style='align-self: flex-end;'>€" . number_format($row['prijs'], 2) . "</p>";
                 echo "</div>";

@@ -1,6 +1,6 @@
 <?php
-include 'session.php';
-include 'connect.php';
+include __DIR__ . '/../session.php';
+include __DIR__ . '/../connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     $winkelwagen_id = $_POST['winkelwagen_id'];
@@ -21,15 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Dolce Vita - Home</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/images/favicon.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
 
-    <script src="script.js"></script>
+    <script src="../assets/js/script.js"></script>
 
     <?php if ($winkelwagenOpen): ?>
         <script>
@@ -43,47 +43,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
 </head>
 
 
-
-<body class="contact">
+<body class="index">
     <?php
-    include 'header.php';
+    include __DIR__ . '/../header.php';
     ?>
     <?php
-    include 'knoppen.php';
+    include __DIR__ . '/../knoppen.php';
     ?>
-    <div class="container scrolbaar">
+    <div class="container">
 
         <div class="inlog" style="display: none;">
-            <span class="close-btn"><img src="images/kruis.png" alt="kruis"></span>
+            <span class="close-btn"><img src="../assets/images/kruis.png" alt="kruis"></span>
             <h2 style="text-align: center;">login</h2>
-            <form class="inlog-box" action="inloggen.php" method="post">
+            <form id="loginForm" class="inlog-box" action="inloggen.php" method="post">
                 <input type="email" name="email" placeholder="E-mailadres" required>
                 <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
                 <input type="submit" value="doorgaan">
             </form>
             <div class="signup">nog geen account? <a href="#" style="color: #36160A;">maak er een!</a></div>
         </div>
-        <div class="content" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-            <h1>contact</h1>
-            <h2>neem contact met ons op via:</h2>
-            <div class="phone" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
-                <img style="width: 40px; height: 40px;" src="images/telefoon.png" alt="telefoon">
-                <p>024 12 34 56</p>
-            </div>
-            <div class="email" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
-                <img style="width: 40px; height: 40px;" src="images/mail.png" alt="email">
-                <p>contact.ladolcevita.nl</p>
-            </div>
-            <div class="line2"></div>
-            <h2>of bezoek ons restaurant</h2>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4931.661490599537!2d5.866273276490216!3d51.827522271887865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c708fa2ca25e35%3A0x8daddc0e2cfc98dc!2sHeyendaalseweg%2098%2C%206525%20EE%20Nijmegen!5e0!3m2!1snl!2snl!4v1739898112497!5m2!1snl!2snl"
-                width="450" height="337" style="border:0;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+        <div class="content" style="text-align: center;">
+            <h1>La Dolce Vita</h1>
+            <p>Het restaurant voor je echte pizza</p>
+            <a href="menu.php" class="btn">Bestellen</a>
+            <?php
+
+            if (isset($conn)) {
+                $sql = "SELECT * FROM account WHERE emailadres = :email";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(":email", $email);
+                $stmt->execute();
+            } else {
+                echo "Database connection is not established.";
+            }
+            $user = $stmt->fetch(PDO::FETCH_ASSOC); 
+            
+            if ($user && $user['rol'] === 'admin') {
+                echo "Welkom, admin!";
+            }
+
+            ?>
         </div>
+
     </div>
     <div class="shoppingcart" style="display: <?php echo $winkelwagenOpen ? 'flex' : 'none'; ?>;">
-        <span class="sluit-winkelwagen"><img src="images/kruis2.png" alt="kruis"></span>
+        <span class="sluit-winkelwagen"><img src="../assets/images/kruis2.png" alt="kruis"></span>
         <h2>winkelwagen</h2>
         <?php
         $sql = "SELECT p.foto, p.titel, p.beschrijving, p.prijs, wp.aantal, (p.prijs * wp.aantal) AS totaalprijs, wp.id AS winkelwagen_id 
@@ -95,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
         if ($result->rowCount() > 0) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 echo "<div class='winkelwagen-product'>";
-                echo "<img class='winkelwagen-foto' src='images/" . $row['foto'] . "' alt='Product afbeelding'>";
+                echo "<img class='winkelwagen-foto' src='../assets/images/" . $row['foto'] . "' alt='Product afbeelding'>";
                 echo "<div class='product-info'>";
                 echo "<h3>" . $row['titel'] . "</h3>";
                 echo "<p>" . $row['beschrijving'] . "</p>";
@@ -103,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
                 echo "<div class='product-actions' style='display: flex; flex-direction: column; justify-content: space-between; height: 100%;'>";
                 echo "<form action='' method='post' class='verwijder-form' style='align-self: flex-start;'>";
                 echo "<input type='hidden' name='winkelwagen_id' value='" . $row['winkelwagen_id'] . "'>";
-                echo "<button type='submit' class='verwijder-knop'><img src='images/delete_icon.png' alt='Verwijder'></button>";
+                echo "<button type='submit' class='verwijder-knop'><img src='../assets/images/delete_icon.png' alt='Verwijder'></button>";
                 echo "</form>";
                 echo "<p class='prijs' style='align-self: flex-end;'>€" . number_format($row['prijs'], 2) . "</p>";
                 echo "</div>";

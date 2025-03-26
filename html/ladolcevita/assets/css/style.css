@@ -108,19 +108,19 @@ nav a {
 .admin,
 .pizza,
 .account {
-    background-image: url("images/achtergrondindex.png");
+    background-image: url("../images/achtergrondindex.png");
 }
 
 .menu {
-    background-image: url("images/achtergrondmenu.png");
+    background-image: url("../images/achtergrondmenu.png");
 }
 
 .overons {
-    background-image: url("images/achtergrondoverons.png");
+    background-image: url("../images/achtergrondoverons.png");
 }
 
 .contact {
-    background-image: url("images/achtergrondcontact.png");
+    background-image: url("../images/achtergrondcontact.png");
 }
 
 .container {
@@ -771,16 +771,3 @@ textarea {
     }
 
 } */
-
-.colors {
-    color: #8F9F5D;
-    color: #36160A;
-    color: #191919;
-    color: #3D1E10;
-    color: #f0f0f0;
-    color: #cccccc;
-    color: #000;
-    color: #5a2d16;
-    color: #f0f0f0;
-  }
-   */

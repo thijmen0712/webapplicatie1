@@ -1,6 +1,6 @@
 <?php
-include 'session.php';
-include 'connect.php';
+include '../session.php';
+include '../connect.php';
 
 if ($_SESSION['role'] != 'admin') {
     header('Location: index.php');
@@ -15,7 +15,7 @@ if ($_SESSION['role'] != 'admin') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>admin panel- pizza</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body class="admin">
@@ -32,7 +32,7 @@ if ($_SESSION['role'] != 'admin') {
                 <form action="addpizza.php" method="post" enctype="multipart/form-data">
                     <p>afbeelding uploaden</p>
                     <div class="upload" style="display: flex; justify-content: center; align-items: center;">
-                        <img src="images/upload.png" alt="upload">
+                        <img src="../assets/images/upload.png" alt="upload">
                         <input type="file" name="file" id="file" required>
                     </div>
 
@@ -60,15 +60,15 @@ if ($_SESSION['role'] != 'admin') {
                 if ($result->rowCount() > 0) {
                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                         echo "<div class='pizza-item'>";
-                        echo "<div class='pizza-image'><img src='images/" . $row['foto'] . "' alt='" . $row['titel'] . "'></div>";
+                        echo "<div class='pizza-image'><img src='../assets/images/" . $row['foto'] . "' alt='" . $row['titel'] . "'></div>";
                         echo "<div class='pizza-details'>";
                         echo "<div class='pizza-title'>" . $row['titel'] . "</div>";
                         echo "<div class='pizza-description'>" . $row['beschrijving'] . "</div>";
                         echo "</div>";
                         echo "<div class='pizza-price'>" . $row['prijs'] . "</div>";
                         echo "<div class='pizza-actions'>";
-                        echo "<a href='#' onclick=\"openIframe('editpizza.php?id=" . $row['id'] . "')\"><img src='images/pencil.png'></a>";
-                        echo "<a href='deletepizza.php?id=" . $row['id'] . "'><img src='images/bin.png'></a>";
+                        echo "<a href='#' onclick=\"openIframe('editpizza.php?id=" . $row['id'] . "')\"><img src='../assets/images/pencil.png'></a>";
+                        echo "<a href='deletepizza.php?id=" . $row['id'] . "'><img src='../assets/images/bin.png'></a>";
                         echo "</div>";
                         echo "</div>";
                     }

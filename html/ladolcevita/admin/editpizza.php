@@ -10,9 +10,9 @@ if ($_SESSION['role'] != 'admin') {
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Haal de huidige gegevens op
-    $stmt = $conn->prepare("SELECT * FROM product WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt = $conn->prepare("SELECT * FROM product WHERE id = :id");
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->execute();
     $pizza = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$pizza) {
@@ -25,21 +25,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titel = $_POST['titel'];
     $beschrijving = $_POST['beschrijving'];
     $prijs = $_POST['prijs'];
-    $foto = $pizza['foto']; // Huidige foto behouden
+    $foto = $pizza['foto'];
 
-    // Controleer of er een nieuwe foto is geüpload
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == UPLOAD_ERR_OK) {
         $foto = basename($_FILES['foto']['name']);
-        move_uploaded_file($_FILES['foto']['tmp_name'], $foto);
+        move_uploaded_file($_FILES['foto']['tmp_name'], "images/" . $foto);
     }
 
-    // Update de pizza in de database
-    $stmt = $conn->prepare("UPDATE product SET titel = ?, beschrijving = ?, prijs = ?, foto = ? WHERE id = ?");
-    $stmt->execute([$titel, $beschrijving, $prijs, $foto, $id]);
+    $sql = "UPDATE product SET titel = :titel, beschrijving = :beschrijving, prijs = :prijs, foto = :foto WHERE id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->bindParam(":titel", $titel, PDO::PARAM_STR);
+    $stmt->bindParam(":beschrijving", $beschrijving, PDO::PARAM_STR);
+    $stmt->bindParam(":prijs", $prijs, PDO::PARAM_STR);
+    $stmt->bindParam(":foto", $foto, PDO::PARAM_STR);
+    $stmt->execute();
 
-    echo "<script>parent.location.reload();</script>"; // Pagina herladen na wijziging
+    echo "<script>parent.location.reload();</script>";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="nl">

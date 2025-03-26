@@ -1,4 +1,4 @@
-<script src="script.js"></script>
+<script src="assets/js/script.js"></script>
 <div class="knoppen">
     <div id="submenu" class="submenu">
         <a href="uitloggen.php" id="logoutBtn">Uitloggen</a>
@@ -6,7 +6,7 @@
 
     <?php
     if ($_SESSION['role'] === 'admin') {
-        echo "<a href='admin.php'>Admin menu</a>";
+        echo "<a href='../admin/admin.php'>Admin menu</a>";
     }
     ?>
     <?php
@@ -25,7 +25,7 @@
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $totalPrice = $row['totaalprijs'] ? number_format($row['totaalprijs'], 2) : '0.00';
     ?>
-    <a class="winkelwagen" href="winkelwagen"><img src="images/winkelwagen.png"
+    <a class="winkelwagen" href="winkelwagen"><img src="../assets/images/winkelwagen.png"
             alt="winkelwagen">€<?php echo $totalPrice; ?></a>
 </div>
 

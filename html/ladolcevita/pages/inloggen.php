@@ -1,6 +1,15 @@
 <?php
-include 'session.php';
-include 'connect.php';
+if (file_exists(__DIR__ . '/../session.php')) {
+    include __DIR__ . '/../session.php';
+} else {
+    die("Error: session.php not found.");
+}
+
+if (file_exists(__DIR__ . '/../connect.php')) {
+    include __DIR__ . '/../connect.php';
+} else {
+    die("Error: connect.php not found.");
+}
 
 header('Content-Type: application/json');
 
@@ -10,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $sql = "SELECT id, naam, wachtwoord FROM account WHERE emailadres = :email";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
+        $redirect_url = $_SERVER['HTTP_REFERER'] ?? 'default_page.php';
+    $stmt->execute([':email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && $wachtwoord === $user['wachtwoord']) {

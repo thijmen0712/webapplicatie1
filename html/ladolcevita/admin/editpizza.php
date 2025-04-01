@@ -1,6 +1,6 @@
 <?php
-include 'session.php';
-include 'connect.php';
+include '../session.php';
+include '../connect.php';
 
 if ($_SESSION['role'] != 'admin') {
     header('Location: index.php');
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == UPLOAD_ERR_OK) {
         $foto = basename($_FILES['foto']['name']);
-        move_uploaded_file($_FILES['foto']['tmp_name'], "images/" . $foto);
+        move_uploaded_file($_FILES['foto']['tmp_name'], "../assets/images/" . $foto);
     }
 
     $sql = "UPDATE product SET titel = :titel, beschrijving = :beschrijving, prijs = :prijs, foto = :foto WHERE id = :id";
@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label>Foto:</label>
             <div style="display: flex; align-items: center; gap: 10px;">
                 <?php if (!empty($pizza['foto'])): ?>
-                    <img class="foto" src="images/<?= htmlspecialchars($pizza['foto']) ?>"
+                    <img class="foto" src="../assets/images/<?= htmlspecialchars($pizza['foto']) ?>"
                         alt="<?= htmlspecialchars($pizza['titel']) ?>">
                     <input type="file" name="foto">
                 <?php endif; ?>

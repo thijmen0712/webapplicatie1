@@ -13,8 +13,8 @@
     $knopTekst = isset($_SESSION['gebruiker_naam']) ? $_SESSION['gebruiker_naam'] : 'Inloggen';
     ?>
 
-    <button id="loginBtn" onclick="toggleLogin()"
-        style="cursor: pointer"><?php echo htmlspecialchars($knopTekst); ?></button>
+    <button id="loginBtn" style="cursor: pointer"><?php echo htmlspecialchars($knopTekst); ?></button>
+
 
 
     <?php
@@ -25,7 +25,5 @@
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $totalPrice = $row['totaalprijs'] ? number_format($row['totaalprijs'], 2) : '0.00';
     ?>
-    <a class="winkelwagen" href="winkelwagen"><img src="../assets/images/winkelwagen.png"
-            alt="winkelwagen">€<?php echo $totalPrice; ?></a>
+    <a class="winkelwagen"><img src="../assets/images/winkelwagen.png" alt="winkelwagen">€<?php echo $totalPrice; ?></a>
 </div>
-

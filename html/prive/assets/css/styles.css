@@ -1,0 +1,145 @@
+html, body {
+    margin: 0;
+    font-family: 'ANWB-UU-Regular';
+}
+
+header {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+header img {
+    width: 100px;
+}
+
+@font-face {
+    font-family: 'ANWB-UU-Regular';
+    src: url('../fonts/anwb-uu-regular.ttf') format('truetype');
+}
+
+nav {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+nav a {
+    font-size: 14px;
+    line-height: 1.6;
+    text-decoration: none;
+    color: white;
+    background-color: #284e73;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #1e3b56;
+}
+
+footer {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 0;
+    box-sizing: border-box;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    bottom: 0;
+    width: 100%;
+}
+
+.keurmerken {
+    display: flex;
+    flex-direction: column;
+}
+
+.keurmerken img {
+    width: 100px;
+    margin: 10px;
+}
+
+.contactgegevens {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+    margin: 20px 0;
+}
+
+.contactgegevens a {
+    color: #284e73;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contactgegevens a:hover {
+    color: #1e3b56;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    margin-bottom: 60px;
+}
+
+h1, h2 {
+    color: #333;
+    margin: 10px;
+}
+
+p, li {
+    color: #555;
+    margin: 0px;
+}
+
+.diensten {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.dienst {
+    border: 1px solid rgb(181, 181, 181);
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+}
+
+.dienst img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form input, form textarea, form button {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #284e73;
+    color: white;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #1e3b56;
+}

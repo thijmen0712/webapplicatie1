@@ -1,24 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
     const loginBtn = document.getElementById("loginBtn");
-    const inlogBox = document.querySelector(".inlog");
+    const inlogBox = document.querySelector("login-form").shadowRoot.querySelector(".inlog");
     const contentBox = document.querySelector(".content");
-    const closeBtn = document.querySelector(".close-btn");
+    const closeBtn = document.querySelector("login-form").shadowRoot.querySelector(".close-btn");
     const signupLink = document.querySelector(".signup a");
-    const loginForm = document.getElementById("loginForm");
+    const loginForm = document.querySelector("login-form");
     const winkelwagenLink = document.querySelector(".winkelwagen");
     const shoppingCart = document.querySelector(".shoppingcart");
     const closeCartBtn = document.querySelector(".sluit-winkelwagen");
 
-    // Check of de gebruiker is ingelogd
+    // Verberg de loginbox standaard
+    inlogBox.style.display = "none";
+
+    // Verander de login status afhankelijk van of de gebruiker ingelogd is
     let isLoggedIn = loginBtn.textContent !== "Inloggen";
 
-    // Voeg submenu toe aan de HTML
+    // Voeg submenu toe voor uitloggen
     const submenu = document.createElement("div");
     submenu.classList.add("submenu");
     submenu.innerHTML = `<a href="uitloggen.php" id="logoutBtn">Uitloggen</a>`;
     submenu.style.display = "none";
     loginBtn.insertAdjacentElement("afterend", submenu);
 
+    // Functie om login of submenu weer te geven
     function toggleLogin() {
         if (isLoggedIn) {
             submenu.style.display = submenu.style.display === "block" ? "none" : "block";
@@ -28,18 +32,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
+    // Eventlistener voor de login knop
     loginBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         toggleLogin();
     });
 
+    // Als ergens anders geklikt wordt, sluit submenu
     document.addEventListener("click", (e) => {
         if (!loginBtn.contains(e.target) && !submenu.contains(e.target)) {
             submenu.style.display = "none";
         }
     });
 
+    // Sluit de loginbox via de close-btn in de shadow DOM
     if (closeBtn) {
         closeBtn.addEventListener("click", () => {
             inlogBox.style.display = "none";
@@ -47,33 +53,27 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-    signupLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        loginForm.innerHTML = `
-            <input type="text" name="naam" placeholder="Naam" required>
-            <input type="email" name="email" placeholder="E-mailadres" required>
-            <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
-            <input type="password" name="herhaal_wachtwoord" placeholder="Herhaal wachtwoord" required>
-            <input type="submit" value="Account aanmaken">
-        `;
-        loginForm.action = "signup.php";
-        loginForm.method = "POST";
-    });
-
+    // Winkelwagen link toont de winkelwagen
     if (winkelwagenLink) {
         winkelwagenLink.addEventListener("click", (e) => {
             e.preventDefault();
-            shoppingCart.style.display = "flex";
+            shoppingCart.style.display = "flex"; // Zorgt ervoor dat de winkelwagen wordt getoond
         });
     }
 
+    // Sluit winkelwagen
     if (closeCartBtn) {
         closeCartBtn.addEventListener("click", () => {
-            shoppingCart.style.display = "none";
+            shoppingCart.style.display = "none"; // Zorgt ervoor dat de winkelwagen wordt verborgen
         });
     }
 });
+
+
+// De rest van je script blijft hetzelfde...
+
+
+// Sorteren van producten
 function sortProducts() {
     const sorteren = document.getElementById('sorteren').value;
     const producten = Array.from(document.querySelectorAll('.product'));
@@ -102,6 +102,8 @@ function sortProducts() {
     container.innerHTML = '';
     producten.forEach(product => container.appendChild(product));
 }
+
+// Reset sorteerfunctie
 function resetSort() {
     document.getElementById('sorteren').value = 'default';
     const container = document.querySelector('.items');
@@ -113,12 +115,14 @@ function resetSort() {
     producten.forEach(product => container.appendChild(product));
 }
 
+// Voeg index toe aan producten voor sorteermogelijkheid
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.product').forEach((product, index) => {
         product.dataset.index = index;
     });
 });
 
+// Zoekfunctie voor producten
 document.addEventListener('DOMContentLoaded', () => {
     const zoekInput = document.querySelector('.zoekbalk input');
     const producten = document.querySelectorAll('.product');
@@ -138,8 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
-
+// Sluitknop voor login box
 document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.querySelector('.close-btn');
     const inlogBox = document.querySelector('.inlog');
@@ -153,10 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (overonsContent) {
             overonsContent.style.display = 'block';
         }
-
     });
 });
 
+// Menu toggle (mobielmenu)
 function toggleMenu() {
     var nav = document.querySelector('nav');
     if (nav.style.display === 'flex') {

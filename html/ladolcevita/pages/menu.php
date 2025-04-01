@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
-    <script src="/assets/js/script.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const winkelwagenLink = document.querySelector('.winkelwagen');
@@ -77,6 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
         });
     </script>
+    <script src="../assets/js/menu-item.js"></script>
+    <script src="../assets/js/script.js"></script>
 
 </head>
 
@@ -121,21 +123,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = "SELECT * FROM product";
                 $stmt = $conn->query($sql);
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    echo '<div class="product">';
-                    echo '<img src="../assets/images/' . $row['foto'] . '" alt="' . $row['titel'] . '">';
-                    echo '<h2>' . $row['titel'] . '</h2>';
-                    echo '<p>' . $row['beschrijving'] . '</p>';
-                    echo '<div class="product-onderkant">';
-                    echo '<p>€' . $row['prijs'] . '</p>';
-                    echo '<form action="" method="post">';
-                    echo '<input type="hidden" name="product_id" value="' . $row['id'] . '">';
-                    echo '<button type="submit">Toevoegen</button>';
-                    echo '</form>';
-                    echo '</div>';
-                    echo '</div>';
+                    echo '<menu-item 
+                foto="../assets/images/' . $row['foto'] . '" 
+                titel="' . $row['titel'] . '" 
+                beschrijving="' . $row['beschrijving'] . '" 
+                prijs="' . $row['prijs'] . '" 
+                id="' . $row['id'] . '">
+              </menu-item>';
                 }
                 ?>
             </div>
+            
+
         </div>
     </div>
     <div class="shoppingcart" style="display: <?php echo $winkelwagenOpen ? 'flex' : 'none'; ?>;">

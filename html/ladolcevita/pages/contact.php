@@ -2,12 +2,27 @@
 include __DIR__ . '/../session.php';
 include __DIR__ . '/../connect.php';
 
+// Start de sessie indien deze nog niet gestart is
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Bepaal of er items in de winkelwagen moeten worden verwijderd
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     $winkelwagen_id = $_POST['winkelwagen_id'];
     $sql = "DELETE FROM winkelwagen_producten WHERE id = :winkelwagen_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':winkelwagen_id', $winkelwagen_id, PDO::PARAM_INT);
     $stmt->execute();
+    $winkelwagenOpen = true;
+} else {
+    $winkelwagenOpen = false;
+}
+
+
+$totalPrice = 0;
+$winkelwagenItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if (count($winkelwagenItems) > 0) {
     $winkelwagenOpen = true;
 } else {
     $winkelwagenOpen = false;
@@ -20,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Dolce Vita - Home</title>
+    <title>La Dolce Vita - Contact</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="icon" href="../assets/images/favicon.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,41 +43,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
-
-    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/script.js" defer></script>
+    <script src="../assets/js/cart-item.js" defer></script>
+    <script src="../assets/js/login-form.js" defer></script>
 
     <?php if ($winkelwagenOpen): ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const shoppingCart = document.querySelector('.shoppingcart');
-                shoppingCart.style.display = 'flex';
+                document.querySelector('.shoppingcart').style.display = 'flex';
             });
         </script>
     <?php endif; ?>
 
 </head>
 
-
-
 <body class="contact">
-    <?php
-    include __DIR__ . '/../header.php';
-    ?>
-    <?php
-    include __DIR__ . '/../knoppen.php';
-    ?>
-    <div class="container scrolbaar">
+    <?php include __DIR__ . '/../header.php'; ?>
+    <?php include __DIR__ . '/../knoppen.php'; ?>
 
-        <div class="inlog" style="display: none;">
-            <span class="close-btn"><img src="../assets/images/kruis.png" alt="kruis"></span>
-            <h2 style="text-align: center;">login</h2>
-            <form class="inlog-box" action="inloggen.php" method="post">
-                <input type="email" name="email" placeholder="E-mailadres" required>
-                <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
-                <input type="submit" value="doorgaan">
-            </form>
-            <div class="signup">nog geen account? <a href="#" style="color: #36160A;">maak er een!</a></div>
-        </div>
+    <div class="container scrolbaar">
+        <login-form></login-form>
         <div class="content" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
             <h1>contact</h1>
             <h2>neem contact met ons op via:</h2>
@@ -82,44 +82,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['winkelwagen_id'])) {
                 referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
+
     <div class="shoppingcart" style="display: <?php echo $winkelwagenOpen ? 'flex' : 'none'; ?>;">
         <span class="sluit-winkelwagen"><img src="../assets/images/kruis2.png" alt="kruis"></span>
         <h2>winkelwagen</h2>
-        <?php
-        $sql = "SELECT p.foto, p.titel, p.beschrijving, p.prijs, wp.aantal, (p.prijs * wp.aantal) AS totaalprijs, wp.id AS winkelwagen_id 
-        FROM winkelwagen_producten wp
-        JOIN product p ON wp.product_id = p.id";
-        $result = $conn->query($sql);
+        <?php if (count($winkelwagenItems) > 0): ?>
+            <?php foreach ($winkelwagenItems as $row): ?>
+                <cart-item 
+                    image="../assets/images/<?= $row['foto'] ?>"
+                    title="<?= $row['titel'] ?>"
+                    description="<?= $row['beschrijving'] ?>"
+                    price="<?= $row['prijs'] ?>"
+                    cart-id="<?= $row['winkelwagen_id'] ?>"
+                ></cart-item>
+                <?php $totalPrice += $row['totaalprijs']; ?>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Je winkelwagen is leeg.</p>
+        <?php endif; ?>
 
-        $totalPrice = 0;
-        if ($result->rowCount() > 0) {
-            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                echo "<div class='winkelwagen-product'>";
-                echo "<img class='winkelwagen-foto' src='../assets/images/" . $row['foto'] . "' alt='Product afbeelding'>";
-                echo "<div class='product-info'>";
-                echo "<h3>" . $row['titel'] . "</h3>";
-                echo "<p>" . $row['beschrijving'] . "</p>";
-                echo "</div>";
-                echo "<div class='product-actions' style='display: flex; flex-direction: column; justify-content: space-between; height: 100%;'>";
-                echo "<form action='' method='post' class='verwijder-form' style='align-self: flex-start;'>";
-                echo "<input type='hidden' name='winkelwagen_id' value='" . $row['winkelwagen_id'] . "'>";
-                echo "<button type='submit' class='verwijder-knop'><img src='../assets/images/delete_icon.png' alt='Verwijder'></button>";
-                echo "</form>";
-                echo "<p class='prijs' style='align-self: flex-end;'>€" . number_format($row['prijs'], 2) . "</p>";
-                echo "</div>";
-                echo "</div>";
-                $totalPrice += $row['totaalprijs'];
-            }
-        } else {
-            echo "<p>Je winkelwagen is leeg.</p>";
-        }
-        echo "<div class='line'></div>";
-        echo "<p>Totaal: €" . number_format($totalPrice, 2) . "</p>";
-        ?>
+        <div class="line"></div>
+        <p>Totaal: €<?php echo number_format($totalPrice, 2); ?></p>
+
         <div class="verder">
             <a href="">verder naar bestellen</a>
         </div>
     </div>
+
 </body>
 
 </html>

@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
         rel="stylesheet">
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const winkelwagenLink = document.querySelector('.winkelwagen');
@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
     <script src="../assets/js/menu-item.js"></script>
+    <script src="../assets/js/login-form.js"></script>
     <script src="../assets/js/script.js"></script>
 
 </head>
@@ -91,16 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ?>
     <div class="container">
 
-        <div class="inlog" style="display: none;">
-            <span class="close-btn"><img src="../assets/images/kruis.png" alt="kruis"></span>
-            <h2 style="text-align: center;">login</h2>
-            <form class="inlog-box" action="inloggen.php" method="post">
-                <input type="email" name="email" placeholder="E-mailadres" required>
-                <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
-                <input type="submit" value="doorgaan">
-            </form>
-            <div class="signup">nog geen account? <a href="#" style="color: #36160A;">maak er een!</a></div>
-        </div>
+        <login-form></login-form>
         <div class="content menukaart">
             <h1 style="text-align: center;">Menu</h1>
             <div class="zoekbalk">
@@ -133,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 ?>
             </div>
-            
+
 
         </div>
     </div>

@@ -1,137 +1,72 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const loginBtn = document.getElementById("loginBtn");
-    const inlogBox = document.querySelector("login-form").shadowRoot.querySelector(".inlog");
-    const contentBox = document.querySelector(".content");
-    const closeBtn = document.querySelector("login-form").shadowRoot.querySelector(".close-btn");
-    const signupLink = document.querySelector(".signup a");
-    const loginForm = document.querySelector("login-form");
-    const winkelwagenLink = document.querySelector(".winkelwagen");
-    const shoppingCart = document.querySelector(".shoppingcart");
-    const closeCartBtn = document.querySelector(".sluit-winkelwagen");
+document.addEventListener('DOMContentLoaded', () => {
+    const loginBtn = document.getElementById('loginBtn');
+    const inlogBox = document.querySelector('login-form').shadowRoot.querySelector('.inlog');
+    const contentBox = document.querySelector('.content');
+    const closeBtn = document.querySelector('login-form').shadowRoot.querySelector('.close-btn');
+    const signupLink = document.querySelector('.signup a');
+    const loginForm = document.querySelector('login-form');
+    const winkelwagenLink = document.querySelector('.winkelwagen');
+    const shoppingCart = document.querySelector('.shoppingcart');
+    const closeCartBtn = document.querySelector('.sluit-winkelwagen');
 
-    // Verberg de loginbox standaard
-    inlogBox.style.display = "none";
+    inlogBox.style.display = 'none';
+    let isLoggedIn = loginBtn.textContent !== 'Inloggen';
 
-    // Verander de login status afhankelijk van of de gebruiker ingelogd is
-    let isLoggedIn = loginBtn.textContent !== "Inloggen";
+    const submenu = document.createElement('div');
+    submenu.classList.add('submenu');
+    submenu.innerHTML = `<a href='uitloggen.php' id='logoutBtn'>Uitloggen</a>`;
+    submenu.style.display = 'none';
+    loginBtn.insertAdjacentElement('afterend', submenu);
 
-    // Voeg submenu toe voor uitloggen
-    const submenu = document.createElement("div");
-    submenu.classList.add("submenu");
-    submenu.innerHTML = `<a href="uitloggen.php" id="logoutBtn">Uitloggen</a>`;
-    submenu.style.display = "none";
-    loginBtn.insertAdjacentElement("afterend", submenu);
-
-    // Functie om login of submenu weer te geven
     function toggleLogin() {
         if (isLoggedIn) {
-            submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
         } else {
-            inlogBox.style.display = "block";
-            contentBox.style.display = "none";
+            inlogBox.style.display = 'block';
+            contentBox.style.display = 'none';
         }
     }
 
-    // Eventlistener voor de login knop
-    loginBtn.addEventListener("click", (e) => {
+    loginBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleLogin();
     });
 
-    // Als ergens anders geklikt wordt, sluit submenu
-    document.addEventListener("click", (e) => {
+    document.addEventListener('click', (e) => {
         if (!loginBtn.contains(e.target) && !submenu.contains(e.target)) {
-            submenu.style.display = "none";
+            submenu.style.display = 'none';
         }
     });
 
-    // Sluit de loginbox via de close-btn in de shadow DOM
     if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-            inlogBox.style.display = "none";
-            contentBox.style.display = "block";
+        closeBtn.addEventListener('click', () => {
+            inlogBox.style.display = 'none';
+            contentBox.style.display = 'block';
         });
     }
 
-    // Winkelwagen link toont de winkelwagen
     if (winkelwagenLink) {
-        winkelwagenLink.addEventListener("click", (e) => {
+        winkelwagenLink.addEventListener('click', (e) => {
             e.preventDefault();
-            shoppingCart.style.display = "flex"; // Zorgt ervoor dat de winkelwagen wordt getoond
+            shoppingCart.style.display = 'flex';
         });
     }
 
-    // Sluit winkelwagen
     if (closeCartBtn) {
-        closeCartBtn.addEventListener("click", () => {
-            shoppingCart.style.display = "none"; // Zorgt ervoor dat de winkelwagen wordt verborgen
+        closeCartBtn.addEventListener('click', () => {
+            shoppingCart.style.display = 'none';
         });
     }
-});
 
-
-// De rest van je script blijft hetzelfde...
-
-
-// Sorteren van producten
-function sortProducts() {
-    const sorteren = document.getElementById('sorteren').value;
-    const producten = Array.from(document.querySelectorAll('.product'));
-    const container = document.querySelector('.items');
-
-    producten.sort((a, b) => {
-        const prijsA = parseFloat(a.querySelector('.product-onderkant p').textContent.replace('€', ''));
-        const prijsB = parseFloat(b.querySelector('.product-onderkant p').textContent.replace('€', ''));
-        const naamA = a.querySelector('h2').textContent.toLowerCase();
-        const naamB = b.querySelector('h2').textContent.toLowerCase();
-
-        switch (sorteren) {
-            case 'prijs-asc':
-                return prijsA - prijsB;
-            case 'prijs-desc':
-                return prijsB - prijsA;
-            case 'naam-asc':
-                return naamA.localeCompare(naamB);
-            case 'naam-desc':
-                return naamB.localeCompare(naamA);
-            default:
-                return 0;
-        }
-    });
-
-    container.innerHTML = '';
-    producten.forEach(product => container.appendChild(product));
-}
-
-// Reset sorteerfunctie
-function resetSort() {
-    document.getElementById('sorteren').value = 'default';
-    const container = document.querySelector('.items');
-    const producten = Array.from(document.querySelectorAll('.product'));
-
-    producten.sort((a, b) => a.dataset.index - b.dataset.index);
-
-    container.innerHTML = '';
-    producten.forEach(product => container.appendChild(product));
-}
-
-// Voeg index toe aan producten voor sorteermogelijkheid
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.product').forEach((product, index) => {
-        product.dataset.index = index;
-    });
-});
-
-// Zoekfunctie voor producten
-document.addEventListener('DOMContentLoaded', () => {
     const zoekInput = document.querySelector('.zoekbalk input');
-    const producten = document.querySelectorAll('.product');
+    const producten = document.querySelectorAll('menu-item');
+    const origineleProducten = Array.from(producten);
 
     zoekInput.addEventListener('input', () => {
         const zoekTerm = zoekInput.value.toLowerCase();
         producten.forEach(product => {
-            const titel = product.querySelector('h2').textContent.toLowerCase();
-            const beschrijving = product.querySelector('p').textContent.toLowerCase();
+            const titel = product.getAttribute('titel').toLowerCase();
+            const beschrijving = product.getAttribute('beschrijving').toLowerCase();
 
             if (titel.includes(zoekTerm) || beschrijving.includes(zoekTerm)) {
                 product.style.display = 'block';
@@ -140,31 +75,54 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-});
 
-// Sluitknop voor login box
-document.addEventListener('DOMContentLoaded', () => {
-    const closeBtn = document.querySelector('.close-btn');
-    const inlogBox = document.querySelector('.inlog');
-    let contentBox = document.querySelector('.content');
+    document.getElementById('sorteren').addEventListener('change', () => {
+        const sorteren = document.getElementById('sorteren').value;
+        const container = document.querySelector('.items');
+        const productenArray = Array.from(document.querySelectorAll('menu-item'));
+
+        productenArray.sort((a, b) => {
+            const prijsA = parseFloat(a.getAttribute('prijs'));
+            const prijsB = parseFloat(b.getAttribute('prijs'));
+            const naamA = a.getAttribute('titel').toLowerCase();
+            const naamB = b.getAttribute('titel').toLowerCase();
+
+            switch (sorteren) {
+                case 'prijs-asc': return prijsA - prijsB;
+                case 'prijs-desc': return prijsB - prijsA;
+                case 'naam-asc': return naamA.localeCompare(naamB);
+                case 'naam-desc': return naamB.localeCompare(naamA);
+                default: return 0;
+            }
+        });
+
+        container.innerHTML = '';
+        productenArray.forEach(product => container.appendChild(product));
+    });
+
+    document.getElementById('resetSort').addEventListener('click', () => {
+        document.getElementById('sorteren').value = 'default';
+        const container = document.querySelector('.items');
+        container.innerHTML = '';
+        origineleProducten.forEach(product => container.appendChild(product));
+    });
+
+    const closeLoginBtn = document.querySelector('.close-btn');
+    const inlogBoxElement = document.querySelector('.inlog');
+    let contentBoxElement = document.querySelector('.content');
     const overonsContent = document.querySelector('.overons-content');
 
-    closeBtn.addEventListener('click', () => {
-        inlogBox.style.display = 'none';
-        if (contentBox) {
-            contentBox.style.display = 'block';
+    closeLoginBtn.addEventListener('click', () => {
+        inlogBoxElement.style.display = 'none';
+        if (contentBoxElement) {
+            contentBoxElement.style.display = 'block';
         } else if (overonsContent) {
             overonsContent.style.display = 'block';
         }
     });
-});
 
-// Menu toggle (mobielmenu)
-function toggleMenu() {
-    var nav = document.querySelector('nav');
-    if (nav.style.display === 'flex') {
-        nav.style.display = 'none';
-    } else {
-        nav.style.display = 'flex';
-    }
-}
+    document.querySelector('.menu-toggle').addEventListener('click', () => {
+        var nav = document.querySelector('nav');
+        nav.style.display = (nav.style.display === 'flex') ? 'none' : 'flex';
+    });
+});

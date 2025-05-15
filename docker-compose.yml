@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile-php
     restart: always
     ports:
-      - "8000:80"
+      - "5555:80"
     volumes:
       - ./html:/var/www/html
     depends_on:

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['gebruiker_id'] = $user['id'];
         $_SESSION['gebruiker_naam'] = $user['naam'];
 
-        // Redirect naar de vorige pagina
+      
         $redirect_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'default_page.php';
         header("Location: $redirect_url");
         exit();
